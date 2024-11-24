@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"mainak55512/ezgit/command"
+	"mainak55512/ezgit/tui"
 	"os"
 )
 
@@ -72,9 +73,10 @@ func ConfigEZ() error {
 		ezconfig.UpdateEZConfig("GitIgnored", true)
 	}
 	if ezconfig.Origin == "" {
-		var remote_url string
-		fmt.Print("Enter the remote url: ")
-		fmt.Scanln(&remote_url)
+		// var remote_url string
+		// fmt.Print("Enter the remote url: ")
+		// fmt.Scanln(&remote_url)
+		remote_url := tui.StartInputTextModel()
 		ezconfig.UpdateEZConfig("Origin", remote_url)
 		if err := command.OriginINIT(remote_url); err != nil {
 			return err
