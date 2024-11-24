@@ -1,6 +1,1 @@
 .ezgit
-
-node_modules/
-temp/
-
-test.go
