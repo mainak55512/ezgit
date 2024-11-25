@@ -9,8 +9,11 @@ import (
 )
 
 type EZConfig struct {
-	Origin     string `json:"origin"`
-	GitIgnored bool   `json:"gitIgnored"`
+	Origin      string `json:"origin"`
+	UserEmail   string `json:"useremail"`
+	UserID      string `json:"userid"`
+	Credentials string `json:"credentials"`
+	GitIgnored  bool   `json:"gitIgnored"`
 }
 
 func InitEZConfig() EZConfig {
@@ -76,11 +79,15 @@ func ConfigEZ() error {
 		// var remote_url string
 		// fmt.Print("Enter the remote url: ")
 		// fmt.Scanln(&remote_url)
-		remote_url := tui.StartInputTextModel()
+		remote_url := tui.StartInputTextModel("Enter the remote url (github/gitlab repo url)")
 		ezconfig.UpdateEZConfig("Origin", remote_url)
 		if err := command.OriginINIT(remote_url); err != nil {
 			return err
 		}
+		user_email := tui.StartInputTextModel("Enter Email id")
+		user_id := tui.StartInputTextModel("Enter remote user id")
+		user_pwd := tui.StartInputTextModel("Enter remote user password")
+		fmt.Println("User Email: ", user_email, "UserID: ", user_id, "User Password: ", user_pwd)
 	}
 	configData, _ := json.MarshalIndent(ezconfig, "", " ")
 	if err := os.WriteFile(".ezgit", configData, 0644); err != nil {

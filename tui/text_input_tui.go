@@ -16,9 +16,9 @@ var (
 	OutputValue      *string
 )
 
-func textInputModel() textModel {
+func textInputModel(placeHolder string) textModel {
 	ti := textinput.New()
-	ti.Placeholder = "Enter the remote url (github/gitlab repo url)"
+	ti.Placeholder = placeHolder
 	ti.PlaceholderStyle = placeHolderStyle
 	ti.Focus()
 	return textModel{
@@ -52,8 +52,8 @@ func (m textModel) View() string {
 	return (m.textInput.View())
 }
 
-func StartInputTextModel() string {
-	p := tea.NewProgram(textInputModel())
+func StartInputTextModel(placeHolder string) string {
+	p := tea.NewProgram(textInputModel(placeHolder))
 	p.Run()
 	return *OutputValue
 }
