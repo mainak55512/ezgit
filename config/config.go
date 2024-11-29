@@ -9,11 +9,11 @@ import (
 )
 
 type EZConfig struct {
-	Origin      string `json:"origin"`
-	UserEmail   string `json:"useremail"`
-	UserID      string `json:"userid"`
-	Credentials string `json:"credentials"`
-	GitIgnored  bool   `json:"gitIgnored"`
+	Origin     string `json:"origin"`
+	UserEmail  string `json:"useremail"`
+	UserID     string `json:"userid"`
+	Credential string `json:"credential"`
+	GitIgnored bool   `json:"gitIgnored"`
 }
 
 func InitEZConfig() EZConfig {
@@ -34,6 +34,27 @@ func (ez *EZConfig) UpdateEZConfig(field string, value any) error {
 	case "GitIgnored":
 		if val, ok := value.(bool); ok {
 			ez.GitIgnored = val
+			return nil
+		} else {
+			return fmt.Errorf("Cannot update config")
+		}
+	case "UserID":
+		if val, ok := value.(string); ok {
+			ez.UserID = val
+			return nil
+		} else {
+			return fmt.Errorf("Cannot update config")
+		}
+	case "UserEmail":
+		if val, ok := value.(string); ok {
+			ez.UserEmail = val
+			return nil
+		} else {
+			return fmt.Errorf("Cannot update config")
+		}
+	case "Credential":
+		if val, ok := value.(string); ok {
+			ez.Credential = val
 			return nil
 		} else {
 			return fmt.Errorf("Cannot update config")
@@ -76,18 +97,26 @@ func ConfigEZ() error {
 		ezconfig.UpdateEZConfig("GitIgnored", true)
 	}
 	if ezconfig.Origin == "" {
-		// var remote_url string
-		// fmt.Print("Enter the remote url: ")
-		// fmt.Scanln(&remote_url)
 		remote_url := tui.StartInputTextModel("Enter the remote url (github/gitlab repo url)")
-		ezconfig.UpdateEZConfig("Origin", remote_url)
 		if err := command.OriginINIT(remote_url); err != nil {
 			return err
 		}
-		user_email := tui.StartInputTextModel("Enter Email id")
+		ezconfig.UpdateEZConfig("Origin", remote_url)
+	}
+	if ezconfig.UserID == "" || ezconfig.UserEmail == "" {
 		user_id := tui.StartInputTextModel("Enter remote user id")
-		user_pwd := tui.StartInputTextModel("Enter remote user password")
-		fmt.Println("User Email: ", user_email, "UserID: ", user_id, "User Password: ", user_pwd)
+		user_email := tui.StartInputTextModel("Enter Email id")
+		if err := command.UserINIT(user_id, user_email); err != nil {
+			return err
+		}
+		ezconfig.UpdateEZConfig("UserID", user_id)
+		ezconfig.UpdateEZConfig("UserEmail", user_email)
+	}
+	if ezconfig.Credential == "" || ezconfig.Credential != "store" {
+		if err := command.CredentialHelperINIT(); err != nil {
+			return err
+		}
+		ezconfig.UpdateEZConfig("Credential", "store")
 	}
 	configData, _ := json.MarshalIndent(ezconfig, "", " ")
 	if err := os.WriteFile(".ezgit", configData, 0644); err != nil {
@@ -98,7 +127,10 @@ func ConfigEZ() error {
 
 func EZInit() error {
 	if _, err := os.Stat(".git"); os.IsNotExist(err) {
-		command.GitINIT()
+		if err := command.GitINIT(); err != nil {
+			return err
+		}
+
 	}
 	if err := ConfigEZ(); err != nil {
 		return err
