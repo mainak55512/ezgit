@@ -1,7 +1,6 @@
+![ezgit](./resources/ezgit.png)
 
-
-
-![ezgit](./resources/ezgit.png)# EZGIT
+# EZGIT
 
 Git CLI wrapper program for noobs.
 
