@@ -2,6 +2,7 @@ package tui
 
 import (
 	"fmt"
+	"mainak55512/ezgit/command"
 )
 
 func (op Outputs) SpitSelectedOutput() {
@@ -12,6 +13,9 @@ func (op Outputs) SpitSelectedOutput() {
 func (op Outputs) Handler() string {
 	switch op.text_output {
 	case "Push updates to Remote":
+		if err := command.GitPush(); err != nil {
+			return fmt.Sprintf("%s, %s", "something went wrong", err)
+		}
 		return "Push"
 	case "Pull updates from Remote":
 		return "Pull"
