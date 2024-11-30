@@ -4,8 +4,6 @@
 
 Git CLI wrapper program for noobs.
 
-
-
 ## Authors
 
 - [Mainak Bhattacharjee](https://github.com/mainak55512)
@@ -15,6 +13,7 @@ Git CLI wrapper program for noobs.
 
 - git v1.7 or higher
 
+### Please note: Only push and pull supported for now.
 
 ## 🚀 About Me
 I'm a Tech enthusiast and a hobby programmer.

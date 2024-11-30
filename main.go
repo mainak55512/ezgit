@@ -19,7 +19,7 @@ func main() {
 		os.Exit(1)
 	} else {
 		if m, ok := res.(tui.TuiModel); ok {
-			m.Output.SpitSelectedOutput()
+			m.Output.RunCommands()
 		}
 	}
 }
