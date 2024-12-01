@@ -31,7 +31,7 @@ func getBranch() (string, error) {
 }
 
 func gitPull(branch string) error {
-	cmd := exec.Command("git", "pull", "origin", branch)
+	cmd := exec.Command("git", "pull", "origin", branch, "--allow-unrelated-histories")
 	cmd.Stdin = os.Stdin
 	cmd.Stdout = os.Stdout
 	if err := cmd.Run(); err != nil {

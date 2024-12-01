@@ -3,8 +3,8 @@ package config
 import (
 	"encoding/json"
 	"fmt"
-	"mainak55512/ezgit/command"
-	"mainak55512/ezgit/tui"
+	"github.com/mainak55512/ezgit/command"
+	"github.com/mainak55512/ezgit/tui"
 	"os"
 )
 
@@ -64,9 +64,13 @@ func (ez *EZConfig) UpdateEZConfig(field string, value any) error {
 }
 
 func ConfigEZ() error {
+	if _, err := os.Stat(".git"); os.IsNotExist(err) {
+		if err := command.GitINIT(); err != nil {
+			return err
+		}
+	}
 	var ezconfig EZConfig
-	_, err := os.Stat(".ezgit")
-	if os.IsNotExist(err) {
+	if _, err := os.Stat(".ezgit"); os.IsNotExist(err) {
 		ezgitFile, err := os.Create(".ezgit")
 		if err != nil {
 			return err
@@ -120,19 +124,6 @@ func ConfigEZ() error {
 	}
 	configData, _ := json.MarshalIndent(ezconfig, "", " ")
 	if err := os.WriteFile(".ezgit", configData, 0644); err != nil {
-		return err
-	}
-	return nil
-}
-
-func EZInit() error {
-	if _, err := os.Stat(".git"); os.IsNotExist(err) {
-		if err := command.GitINIT(); err != nil {
-			return err
-		}
-
-	}
-	if err := ConfigEZ(); err != nil {
 		return err
 	}
 	return nil

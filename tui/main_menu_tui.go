@@ -6,7 +6,7 @@ import (
 )
 
 type Outputs struct {
-	text_output string
+	Text_output string
 }
 
 type TuiModel struct {
@@ -21,8 +21,8 @@ func InitialModel() TuiModel {
 		choices: []string{
 			"Push updates to Remote",
 			"Pull updates from Remote",
-			"Fetch from pull request",
-			"Create new Local Branch",
+			// "Fetch from pull request",
+			// "Create new Local Branch",
 		},
 		selected: make(map[int]struct{}),
 	}
@@ -51,7 +51,7 @@ func (m TuiModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			} else {
 				m.selected[m.cursor] = struct{}{}
 			}
-			m.Output.text_output = m.choices[m.cursor]
+			m.Output.Text_output = m.choices[m.cursor]
 			return m, tea.Quit
 		}
 	}

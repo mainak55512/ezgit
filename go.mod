@@ -1,4 +1,4 @@
-module mainak55512/ezgit
+module github.com/mainak55512/ezgit
 
 go 1.22.5
 
