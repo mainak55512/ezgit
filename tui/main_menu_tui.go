@@ -19,8 +19,9 @@ type TuiModel struct {
 func InitialModel() TuiModel {
 	return TuiModel{
 		choices: []string{
-			"Push updates to Remote",
-			"Pull updates from Remote",
+			"Push to Remote",
+			"Pull from Remote",
+			"Manage Branches",
 			// "Fetch from pull request",
 			// "Create new Local Branch",
 		},

@@ -28,7 +28,15 @@ func Handler(op tui.Outputs) string {
 			return fmt.Sprintf("%s, %s", "something went wrong", err)
 		}
 		return "Pull"
-	case "Fetch from pull request":
+	case "Manage Branches":
+		tui.StartBranchModel()
+		// fmt.Println("Selected Branch Option: ", op)
+		branchList, err := command.ListGitBranch()
+		if err != nil {
+			return fmt.Sprintf("%s, %s", "something went wrong", err)
+		}
+		br := tui.StartAvailableBranchOptions(branchList)
+		fmt.Println("Selected Branch: ", br)
 		return "Fetch"
 	case "Create new Local Branch":
 		return "Create branch"

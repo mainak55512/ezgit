@@ -52,6 +52,24 @@ func gitPush(branch string) error {
 	return nil
 }
 
+func ListGitBranch() ([]string, error) {
+	cmd := exec.Command("git", "branch")
+	result, err := cmd.Output()
+	if err != nil {
+		return nil, err
+	}
+	var branchNames []string
+	stringList := strings.Split(string(result), "\n")
+	for _, x := range stringList {
+		if x != "" {
+			x := strings.Replace(x, "*", "", -1)
+			branchNames = append(branchNames, strings.TrimSpace(x))
+		}
+	}
+	// fmt.Println("Available branches: ", branchNames, "length: ", len(branchNames))
+	return branchNames, nil
+}
+
 func GitPullExec() error {
 	if err := gitAdd(); err != nil {
 		fmt.Println("Error in git add")
