@@ -36,7 +36,7 @@ func Handler(op tui.Outputs) string {
 		if err := HandleBranchOperations(opt); err != nil {
 			return fmt.Sprintf("%s, %s", "something went wrong", err)
 		}
-		return "Fetch"
+		return "Branch"
 	case "Create new Local Branch":
 		return "Create branch"
 	default:
