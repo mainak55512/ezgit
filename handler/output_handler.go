@@ -7,7 +7,6 @@ import (
 	"github.com/mainak55512/ezgit/tui"
 )
 
-// TODO: need to implement the commands for each input.
 func Handler(op tui.Outputs) string {
 	switch op.Text_output {
 	case "Push to Remote":
