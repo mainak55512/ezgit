@@ -143,7 +143,7 @@ func ConfigEZ() (EZConfig, error) {
 		}
 	}
 	if ezconfig.BaseBranch == "" {
-		base_branch := tui.StartInputTextModel("Enter the remote base-branch (main/master)")
+		base_branch := tui.StartInputTextModel("Enter the remote default branch (main/master)")
 		// command.OriginINIT(remote_url)
 		if err := ezconfig.UpdateEZConfig("BaseBranch", base_branch); err != nil {
 			return EZConfig{}, err
