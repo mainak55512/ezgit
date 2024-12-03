@@ -17,7 +17,7 @@ func main() {
 	} else {
 		if m, ok := res.(tui.TuiModel); ok {
 			// m.Output.RunCommands()
-			fmt.Println(handler.Handler(m.Output))
+			handler.Handler(m.Output)
 		}
 	}
 }
