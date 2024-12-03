@@ -21,7 +21,7 @@ func HandleBranchOperations(option string) error {
 			return err
 		}
 	case "Create & Switch Branch":
-		if err := config.ConfigEZ(); err != nil {
+		if _, err := config.ConfigEZ(); err != nil {
 			return err
 		}
 		newBranch := tui.StartInputTextModel("New Branch Name")

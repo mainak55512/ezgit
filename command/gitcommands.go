@@ -94,25 +94,21 @@ func DeleteGitBranch(branch string) error {
 	return nil
 }
 
-func GitPullExec() error {
+func GitPullExec(baseBranch string) error {
 	if err := gitAdd(); err != nil {
 		fmt.Println("Error in git add")
 		return err
 	}
 	gitCommit()
-	// branch, err := getBranch()
-	// if err != nil {
-	// 	return err
-	// }
-	fmt.Println("Pulling from: ", "master")
-	if err := gitPull("master"); err != nil {
+	fmt.Println("Pulling from: ", baseBranch)
+	if err := gitPull(baseBranch); err != nil {
 		return err
 	}
 	return nil
 }
 
-func GitPushExec() error {
-	if err := GitPullExec(); err != nil {
+func GitPushExec(baseBranch string) error {
+	if err := GitPullExec(baseBranch); err != nil {
 		return err
 	}
 	branch, err := getBranch()
