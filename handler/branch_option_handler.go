@@ -13,7 +13,10 @@ func HandleBranchOperations(option string) error {
 		if err != nil {
 			return err
 		}
-		br := tui.StartAvailableBranchOptions(branchList)
+		br, err := tui.StartAvailableBranchOptions(branchList)
+		if err != nil {
+			return err
+		}
 		if err := command.SwitchGitBranch(br); err != nil {
 			return err
 		}
@@ -30,7 +33,10 @@ func HandleBranchOperations(option string) error {
 		if err != nil {
 			return err
 		}
-		br := tui.StartAvailableBranchOptions(branchList)
+		br, err := tui.StartAvailableBranchOptions(branchList)
+		if err != nil {
+			return err
+		}
 		if err := command.DeleteGitBranch(br); err != nil {
 			return err
 		}

@@ -75,8 +75,10 @@ func (m AvailableBranchModel) View() string {
 	return s
 }
 
-func StartAvailableBranchOptions(branchList []string) string {
+func StartAvailableBranchOptions(branchList []string) (string, error) {
 	p := tea.NewProgram(InitialAvailableBranchModel(branchList))
-	p.Run()
-	return SelectedBranch
+	if _, err := p.Run(); err != nil {
+		return "", err
+	}
+	return SelectedBranch, nil
 }

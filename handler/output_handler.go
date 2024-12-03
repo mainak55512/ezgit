@@ -10,7 +10,7 @@ import (
 // TODO: need to implement the commands for each input.
 func Handler(op tui.Outputs) string {
 	switch op.Text_output {
-	case "Push updates to Remote":
+	case "Push to Remote":
 		if err := config.ConfigEZ(); err != nil {
 			return fmt.Sprintf("%s, %s", "something went wrong", err)
 		}
@@ -19,7 +19,7 @@ func Handler(op tui.Outputs) string {
 			return fmt.Sprintf("%s, %s", "something went wrong", err)
 		}
 		return "Push"
-	case "Pull updates from Remote":
+	case "Pull from Remote":
 		if err := config.ConfigEZ(); err != nil {
 			return fmt.Sprintf("%s, %s", "something went wrong", err)
 		}
