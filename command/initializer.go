@@ -1,7 +1,9 @@
 package command
 
 import (
+	// "fmt"
 	"os/exec"
+	// "strings"
 )
 
 func GitINIT() error {
@@ -12,12 +14,9 @@ func GitINIT() error {
 	return nil
 }
 
-func OriginINIT(remoteUrl string) error {
+func OriginINIT(remoteUrl string) {
 	cmd := exec.Command("git", "remote", "add", "origin", remoteUrl)
-	if err := cmd.Run(); err != nil {
-		return err
-	}
-	return nil
+	cmd.Run()
 }
 
 func UserINIT(user_id, user_email string) error {

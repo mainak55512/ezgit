@@ -13,7 +13,7 @@ type textModel struct {
 
 var (
 	placeHolderStyle = lipgloss.NewStyle().Italic(true)
-	OutputValue      *string
+	OutputValue      string
 )
 
 func textInputModel(placeHolder string) textModel {
@@ -38,7 +38,7 @@ func (m textModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		switch msg.Type {
 		case tea.KeyEnter:
 			value := m.textInput.Value()
-			OutputValue = &value
+			OutputValue = value
 			return m, tea.Quit
 		case tea.KeyCtrlC:
 			return nil, tea.Quit
@@ -55,5 +55,5 @@ func (m textModel) View() string {
 func StartInputTextModel(placeHolder string) string {
 	p := tea.NewProgram(textInputModel(placeHolder))
 	p.Run()
-	return *OutputValue
+	return OutputValue
 }

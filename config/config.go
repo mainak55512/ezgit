@@ -18,6 +18,10 @@ type EZConfig struct {
 
 func InitEZConfig() EZConfig {
 	return EZConfig{
+		Origin:     "",
+		UserEmail:  "",
+		UserID:     "",
+		Credential: "",
 		GitIgnored: false,
 	}
 }
@@ -98,14 +102,16 @@ func ConfigEZ() error {
 		if _, err := file.WriteString(".ezgit"); err != nil {
 			return err
 		}
-		ezconfig.UpdateEZConfig("GitIgnored", true)
+		if err := ezconfig.UpdateEZConfig("GitIgnored", true); err != nil {
+			return err
+		}
 	}
 	if ezconfig.Origin == "" {
 		remote_url := tui.StartInputTextModel("Enter the remote url (github/gitlab repo url)")
-		if err := command.OriginINIT(remote_url); err != nil {
+		command.OriginINIT(remote_url)
+		if err := ezconfig.UpdateEZConfig("Origin", remote_url); err != nil {
 			return err
 		}
-		ezconfig.UpdateEZConfig("Origin", remote_url)
 	}
 	if ezconfig.UserID == "" || ezconfig.UserEmail == "" {
 		user_id := tui.StartInputTextModel("Enter remote user id")
@@ -113,14 +119,20 @@ func ConfigEZ() error {
 		if err := command.UserINIT(user_id, user_email); err != nil {
 			return err
 		}
-		ezconfig.UpdateEZConfig("UserID", user_id)
-		ezconfig.UpdateEZConfig("UserEmail", user_email)
+		if err := ezconfig.UpdateEZConfig("UserID", user_id); err != nil {
+			return err
+		}
+		if err := ezconfig.UpdateEZConfig("UserEmail", user_email); err != nil {
+			return err
+		}
 	}
 	if ezconfig.Credential == "" || ezconfig.Credential != "store" {
 		if err := command.CredentialHelperINIT(); err != nil {
 			return err
 		}
-		ezconfig.UpdateEZConfig("Credential", "store")
+		if err := ezconfig.UpdateEZConfig("Credential", "store"); err != nil {
+			return err
+		}
 	}
 	configData, _ := json.MarshalIndent(ezconfig, "", " ")
 	if err := os.WriteFile(".ezgit", configData, 0644); err != nil {
