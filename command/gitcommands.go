@@ -100,12 +100,12 @@ func GitPullExec() error {
 		return err
 	}
 	gitCommit()
-	branch, err := getBranch()
-	if err != nil {
-		return err
-	}
-	fmt.Println("Branch: ", string(branch))
-	if err := gitPull(branch); err != nil {
+	// branch, err := getBranch()
+	// if err != nil {
+	// 	return err
+	// }
+	fmt.Println("Pulling from: ", "master")
+	if err := gitPull("master"); err != nil {
 		return err
 	}
 	return nil
