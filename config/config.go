@@ -99,7 +99,7 @@ func ConfigEZ() error {
 			return err
 		}
 		defer file.Close()
-		if _, err := file.WriteString(".ezgit"); err != nil {
+		if _, err := file.WriteString(".ezgit\n"); err != nil {
 			return err
 		}
 		if err := ezconfig.UpdateEZConfig("GitIgnored", true); err != nil {
