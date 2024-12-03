@@ -6,7 +6,7 @@ import (
 )
 
 var (
-	SelectedBranchOption *string
+	SelectedBranchOption string
 )
 
 type BranchModel struct {
@@ -49,7 +49,7 @@ func (m BranchModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			} else {
 				m.selected[m.cursor] = struct{}{}
 			}
-			SelectedBranchOption = &m.choices[m.cursor]
+			SelectedBranchOption = m.choices[m.cursor]
 			return m, tea.Quit
 		}
 	}
@@ -79,8 +79,10 @@ func (m BranchModel) View() string {
 	return s
 }
 
-func StartBranchModel() string {
+func StartBranchModel() (string, error) {
 	p := tea.NewProgram(InitialBranchModel())
-	p.Run()
-	return *SelectedBranchOption
+	if _, err := p.Run(); err != nil {
+		return "", err
+	}
+	return SelectedBranchOption, nil
 }

@@ -70,6 +70,30 @@ func ListGitBranch() ([]string, error) {
 	return branchNames, nil
 }
 
+func SwitchGitBranch(branch string) error {
+	cmd := exec.Command("git", "switch", branch)
+	if err := cmd.Run(); err != nil {
+		return err
+	}
+	return nil
+}
+
+func CreateGitBranch(branch string) error {
+	cmd := exec.Command("git", "checkout", "-b", branch)
+	if err := cmd.Run(); err != nil {
+		return err
+	}
+	return nil
+}
+
+func DeleteGitBranch(branch string) error {
+	cmd := exec.Command("git", "branch", "-D", branch)
+	if err := cmd.Run(); err != nil {
+		return err
+	}
+	return nil
+}
+
 func GitPullExec() error {
 	if err := gitAdd(); err != nil {
 		fmt.Println("Error in git add")

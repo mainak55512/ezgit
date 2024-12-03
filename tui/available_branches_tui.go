@@ -6,7 +6,7 @@ import (
 )
 
 var (
-	SelectedBranch *string
+	SelectedBranch string
 )
 
 type AvailableBranchModel struct {
@@ -45,7 +45,7 @@ func (m AvailableBranchModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			} else {
 				m.selected[m.cursor] = struct{}{}
 			}
-			SelectedBranch = &m.choices[m.cursor]
+			SelectedBranch = m.choices[m.cursor]
 			return m, tea.Quit
 		}
 	}
@@ -53,7 +53,7 @@ func (m AvailableBranchModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	return m, nil
 }
 func (m AvailableBranchModel) View() string {
-	s := "\nWhat to do?\n\n"
+	s := "\nSelect Branch\n\n"
 
 	for i, choice := range m.choices {
 
@@ -78,5 +78,5 @@ func (m AvailableBranchModel) View() string {
 func StartAvailableBranchOptions(branchList []string) string {
 	p := tea.NewProgram(InitialAvailableBranchModel(branchList))
 	p.Run()
-	return *SelectedBranch
+	return SelectedBranch
 }
