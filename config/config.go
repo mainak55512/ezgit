@@ -23,6 +23,7 @@ func InitEZConfig() EZConfig {
 		UserEmail:  "",
 		UserID:     "",
 		Credential: "",
+		BaseBranch: "",
 		GitIgnored: false,
 	}
 }
@@ -76,11 +77,6 @@ func (ez *EZConfig) UpdateEZConfig(field string, value any) error {
 }
 
 func ConfigEZ() (EZConfig, error) {
-	if _, err := os.Stat(".git"); os.IsNotExist(err) {
-		if err := command.GitINIT(); err != nil {
-			return EZConfig{}, err
-		}
-	}
 	var ezconfig EZConfig
 	if _, err := os.Stat(".ezgit"); os.IsNotExist(err) {
 		ezgitFile, err := os.Create(".ezgit")
@@ -100,6 +96,17 @@ func ConfigEZ() (EZConfig, error) {
 	}
 	if err := json.Unmarshal(config, &ezconfig); err != nil {
 		return EZConfig{}, err
+	}
+	if _, err := os.Stat(".git"); os.IsNotExist(err) {
+		if err := command.GitINIT(); err != nil {
+			return EZConfig{}, err
+		}
+		if ezconfig.BaseBranch == "" {
+			base_branch := "master"
+			if err := ezconfig.UpdateEZConfig("BaseBranch", base_branch); err != nil {
+				return EZConfig{}, err
+			}
+		}
 	}
 	if ezconfig.GitIgnored == false {
 		file, err := os.OpenFile(".gitignore", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
