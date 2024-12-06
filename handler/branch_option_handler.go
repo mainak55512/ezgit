@@ -7,17 +7,27 @@ import (
 )
 
 func HandleBranchOperations(option string) error {
+	currentBranch, err := command.GetBranch()
+	if err != nil {
+		return err
+	}
+	allAvailableBranches, err := command.ListGitBranch()
+	if err != nil {
+		return err
+	}
 	switch option {
 	case "Switch Branch":
-		branchList, err := command.ListGitBranch()
-		if err != nil {
-			return err
+		var branchList []string
+		for _, elem := range allAvailableBranches {
+			if elem != currentBranch {
+				branchList = append(branchList, elem)
+			}
 		}
 		br, err := tui.StartAvailableBranchOptions(branchList)
 		if err != nil {
 			return err
 		}
-		if err := command.SwitchGitBranch(br); err != nil {
+		if err := command.SwitchGitBranch(currentBranch, br); err != nil {
 			return err
 		}
 	case "Create & Switch Branch":
@@ -25,13 +35,15 @@ func HandleBranchOperations(option string) error {
 			return err
 		}
 		newBranch := tui.StartInputTextModel("New Branch Name")
-		if err := command.CreateGitBranch(newBranch); err != nil {
+		if err := command.CreateGitBranch(currentBranch, newBranch); err != nil {
 			return err
 		}
 	case "Delete Branch":
-		branchList, err := command.ListGitBranch()
-		if err != nil {
-			return err
+		var branchList []string
+		for _, elem := range allAvailableBranches {
+			if elem != currentBranch {
+				branchList = append(branchList, elem)
+			}
 		}
 		br, err := tui.StartAvailableBranchOptions(branchList)
 		if err != nil {

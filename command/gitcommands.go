@@ -22,7 +22,7 @@ func gitCommit() {
 	cmd.Run()
 }
 
-func getBranch() (string, error) {
+func GetBranch() (string, error) {
 	branch, err := exec.Command("git", "rev-parse", "--abbrev-ref", "HEAD").Output()
 	if err != nil {
 		return "", err
@@ -70,16 +70,40 @@ func ListGitBranch() ([]string, error) {
 	return branchNames, nil
 }
 
-func SwitchGitBranch(branch string) error {
-	cmd := exec.Command("git", "switch", branch)
+func SwitchGitBranch(sourcebranch, destinationBranch string) error {
+	if err := gitAdd(); err != nil {
+		fmt.Println("Error in git add")
+		return err
+	}
+	gitCommit()
+	cmd := exec.Command("git", "switch", destinationBranch)
 	if err := cmd.Run(); err != nil {
+		return err
+	}
+	if err := MergeGitBranch(sourcebranch); err != nil {
 		return err
 	}
 	return nil
 }
 
-func CreateGitBranch(branch string) error {
-	cmd := exec.Command("git", "checkout", "-b", branch)
+func CreateGitBranch(currentBranch, newBranch string) error {
+	if err := gitAdd(); err != nil {
+		fmt.Println("Error in git add")
+		return err
+	}
+	gitCommit()
+	cmd := exec.Command("git", "checkout", "-b", newBranch)
+	if err := cmd.Run(); err != nil {
+		return err
+	}
+	if err := MergeGitBranch(currentBranch); err != nil {
+		return err
+	}
+	return nil
+}
+
+func MergeGitBranch(branch string) error {
+	cmd := exec.Command("git", "merge", branch)
 	if err := cmd.Run(); err != nil {
 		return err
 	}
@@ -111,7 +135,7 @@ func GitPushExec(baseBranch string) error {
 	if err := GitPullExec(baseBranch); err != nil {
 		return err
 	}
-	branch, err := getBranch()
+	branch, err := GetBranch()
 	if err != nil {
 		return err
 	}
