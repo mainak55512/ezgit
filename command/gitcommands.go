@@ -1,7 +1,6 @@
 package command
 
 import (
-	// "fmt"
 	"fmt"
 	"os"
 	"os/exec"
@@ -88,7 +87,7 @@ func SwitchGitBranch(sourcebranch, destinationBranch string) error {
 	return nil
 }
 
-func CreateGitBranch(currentBranch, newBranch string) error {
+func CreateGitBranch(baseBranch, newBranch string) error {
 	if err := gitAdd(); err != nil {
 		fmt.Println("Error in git add")
 		return err
@@ -98,7 +97,7 @@ func CreateGitBranch(currentBranch, newBranch string) error {
 	if err := cmd.Run(); err != nil {
 		return err
 	}
-	if err := MergeGitBranch(currentBranch); err != nil {
+	if err := MergeGitBranch(baseBranch); err != nil {
 		return err
 	}
 	return nil
