@@ -6,7 +6,7 @@ import (
 )
 
 var (
-	SelectedBranch string
+	SelectedBranch string // Output from the available branches tui
 )
 
 type AvailableBranchModel struct {
@@ -17,13 +17,15 @@ type AvailableBranchModel struct {
 
 func InitialAvailableBranchModel(branchList []string) AvailableBranchModel {
 	return AvailableBranchModel{
-		choices:  branchList,
+		choices:  branchList, // available branches from the local
 		selected: make(map[int]struct{}),
 	}
 }
+
 func (m AvailableBranchModel) Init() tea.Cmd {
 	return nil
 }
+
 func (m AvailableBranchModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	switch msg := msg.(type) {
 
@@ -52,6 +54,7 @@ func (m AvailableBranchModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 	return m, nil
 }
+
 func (m AvailableBranchModel) View() string {
 	s := "\nSelect Branch\n\n"
 
@@ -75,6 +78,7 @@ func (m AvailableBranchModel) View() string {
 	return s
 }
 
+// This is used to start the branch checkbox tui
 func StartAvailableBranchOptions(branchList []string) (string, error) {
 	p := tea.NewProgram(InitialAvailableBranchModel(branchList))
 	if _, err := p.Run(); err != nil {

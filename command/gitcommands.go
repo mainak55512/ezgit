@@ -7,6 +7,7 @@ import (
 	"strings"
 )
 
+// git add
 func gitAdd() error {
 	cmd := exec.Command("git", "add", ".")
 	if err := cmd.Run(); err != nil {
@@ -15,12 +16,14 @@ func gitAdd() error {
 	return nil
 }
 
+// git commit
 func gitCommit() {
 	msg := "Commit from ezgit"
 	cmd := exec.Command("git", "commit", "-m", msg)
 	cmd.Run()
 }
 
+// Get the current branch
 func GetBranch() (string, error) {
 	branch, err := exec.Command("git", "rev-parse", "--abbrev-ref", "HEAD").Output()
 	if err != nil {
@@ -29,6 +32,7 @@ func GetBranch() (string, error) {
 	return strings.TrimSuffix(string(branch), "\n"), nil
 }
 
+// git pull
 func gitPull(branch string) error {
 	cmd := exec.Command("git", "pull", "origin", branch, "--allow-unrelated-histories")
 	cmd.Stdin = os.Stdin
@@ -40,6 +44,7 @@ func gitPull(branch string) error {
 	return nil
 }
 
+// git push
 func gitPush(branch string) error {
 	cmd := exec.Command("git", "push", "-u", "origin", branch)
 	cmd.Stdin = os.Stdin
@@ -51,6 +56,7 @@ func gitPush(branch string) error {
 	return nil
 }
 
+// List all available branches on the repo
 func ListGitBranch() ([]string, error) {
 	cmd := exec.Command("git", "branch")
 	result, err := cmd.Output()
@@ -69,6 +75,7 @@ func ListGitBranch() ([]string, error) {
 	return branchNames, nil
 }
 
+// git switch
 func SwitchGitBranch(sourcebranch, destinationBranch string) error {
 	if err := gitAdd(); err != nil {
 		fmt.Println("Error in git add")
@@ -87,6 +94,7 @@ func SwitchGitBranch(sourcebranch, destinationBranch string) error {
 	return nil
 }
 
+// git checkout
 func CreateGitBranch(baseBranch, newBranch string) error {
 	if err := gitAdd(); err != nil {
 		fmt.Println("Error in git add")
@@ -103,6 +111,7 @@ func CreateGitBranch(baseBranch, newBranch string) error {
 	return nil
 }
 
+// git merge
 func MergeGitBranch(branch string) error {
 	cmd := exec.Command("git", "merge", branch)
 	cmd.Stdin = os.Stdin
@@ -113,6 +122,7 @@ func MergeGitBranch(branch string) error {
 	return nil
 }
 
+// git branch -D
 func DeleteGitBranch(branch string) error {
 	cmd := exec.Command("git", "branch", "-D", branch)
 	if err := cmd.Run(); err != nil {
@@ -121,6 +131,7 @@ func DeleteGitBranch(branch string) error {
 	return nil
 }
 
+// Handle git pull with all necessary commands like add, commit etc.
 func GitPullExec(baseBranch string) error {
 	if err := gitAdd(); err != nil {
 		fmt.Println("Error in git add")
@@ -134,6 +145,7 @@ func GitPullExec(baseBranch string) error {
 	return nil
 }
 
+// Handle git push with all necessary commands like add, commit etc.
 func GitPushExec(baseBranch string) error {
 	if err := GitPullExec(baseBranch); err != nil {
 		return err

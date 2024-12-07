@@ -6,7 +6,7 @@ import (
 )
 
 var (
-	SelectedBranchOption string
+	SelectedBranchOption string // Output from the branch operations tui
 )
 
 type BranchModel struct {

@@ -6,6 +6,7 @@ import (
 	"github.com/mainak55512/ezgit/tui"
 )
 
+// Handles operations based on the option selected from the branch operation menu tui
 func HandleBranchOperations(option, baseBranch string) error {
 	currentBranch, err := command.GetBranch()
 	if err != nil {

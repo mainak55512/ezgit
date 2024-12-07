@@ -8,6 +8,7 @@ import (
 	"os"
 )
 
+// Main config file structure
 type EZConfig struct {
 	Origin     string `json:"origin"`
 	UserEmail  string `json:"useremail"`
@@ -17,6 +18,7 @@ type EZConfig struct {
 	GitIgnored bool   `json:"gitIgnored"`
 }
 
+// Config Initializer
 func InitEZConfig() EZConfig {
 	return EZConfig{
 		Origin:     "",
@@ -28,6 +30,7 @@ func InitEZConfig() EZConfig {
 	}
 }
 
+// To update config fields
 func (ez *EZConfig) UpdateEZConfig(field string, value any) error {
 	switch field {
 	case "Origin":
@@ -76,8 +79,11 @@ func (ez *EZConfig) UpdateEZConfig(field string, value any) error {
 	return nil
 }
 
+// Initializes .ezgit file, initializes git repo, configures .ezgit with all necessary data and retruns the config structure.
 func ConfigEZ() (EZConfig, error) {
 	var ezconfig EZConfig
+
+	// Creating .ezgit file and initialize it if doesn't exist
 	if _, err := os.Stat(".ezgit"); os.IsNotExist(err) {
 		ezgitFile, err := os.Create(".ezgit")
 		if err != nil {
@@ -90,13 +96,19 @@ func ConfigEZ() (EZConfig, error) {
 			return EZConfig{}, err
 		}
 	}
+
+	// Reading config from .ezgit
 	config, err := os.ReadFile(".ezgit")
 	if err != nil {
 		return EZConfig{}, err
 	}
+
+	// Storing config in local structure
 	if err := json.Unmarshal(config, &ezconfig); err != nil {
 		return EZConfig{}, err
 	}
+
+	// Initialize git repo
 	if _, err := os.Stat(".git"); os.IsNotExist(err) {
 		if err := command.GitINIT(); err != nil {
 			return EZConfig{}, err
@@ -108,6 +120,8 @@ func ConfigEZ() (EZConfig, error) {
 			}
 		}
 	}
+
+	// Adds .ezgit to gitignore
 	if ezconfig.GitIgnored == false {
 		file, err := os.OpenFile(".gitignore", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
 		if err != nil {
@@ -121,6 +135,8 @@ func ConfigEZ() (EZConfig, error) {
 			return EZConfig{}, err
 		}
 	}
+
+	// Initialize remote origin
 	if ezconfig.Origin == "" {
 		remote_url := tui.StartInputTextModel("Enter the remote url (github/gitlab repo url)")
 		command.OriginINIT(remote_url)
@@ -128,6 +144,8 @@ func ConfigEZ() (EZConfig, error) {
 			return EZConfig{}, err
 		}
 	}
+
+	// Set git user and email
 	if ezconfig.UserID == "" || ezconfig.UserEmail == "" {
 		user_id := tui.StartInputTextModel("Enter remote user id")
 		user_email := tui.StartInputTextModel("Enter Email id")
@@ -141,6 +159,8 @@ func ConfigEZ() (EZConfig, error) {
 			return EZConfig{}, err
 		}
 	}
+
+	// Set git credential store
 	if ezconfig.Credential == "" || ezconfig.Credential != "store" {
 		if err := command.CredentialHelperINIT(); err != nil {
 			return EZConfig{}, err
@@ -149,6 +169,8 @@ func ConfigEZ() (EZConfig, error) {
 			return EZConfig{}, err
 		}
 	}
+
+	// Set default branch i.e. main or master
 	if ezconfig.BaseBranch == "" {
 		base_branch := tui.StartInputTextModel("Enter the remote default branch (main/master)")
 		// command.OriginINIT(remote_url)
@@ -156,9 +178,13 @@ func ConfigEZ() (EZConfig, error) {
 			return EZConfig{}, err
 		}
 	}
+
+	// Updating .ezgit file
 	configData, _ := json.MarshalIndent(ezconfig, "", " ")
 	if err := os.WriteFile(".ezgit", configData, 0644); err != nil {
 		return EZConfig{}, err
 	}
+
+	// Returning config structure
 	return ezconfig, nil
 }

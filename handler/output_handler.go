@@ -7,6 +7,7 @@ import (
 	"github.com/mainak55512/ezgit/tui"
 )
 
+// Handles operations based on the option selected from main menu tui
 func Handler(op tui.Outputs) string {
 	switch op.Text_output {
 	case "Push to Remote":

@@ -9,6 +9,7 @@ import (
 )
 
 func main() {
+	// Main menu options
 	p := tea.NewProgram(tui.InitialModel())
 	res, err := p.Run()
 	if err != nil {
@@ -16,7 +17,6 @@ func main() {
 		os.Exit(1)
 	} else {
 		if m, ok := res.(tui.TuiModel); ok {
-			// m.Output.RunCommands()
 			handler.Handler(m.Output)
 		}
 	}

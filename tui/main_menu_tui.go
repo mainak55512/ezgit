@@ -22,15 +22,15 @@ func InitialModel() TuiModel {
 			"Push to Remote",
 			"Pull from Remote",
 			"Manage Branches",
-			// "Fetch from pull request",
-			// "Create new Local Branch",
 		},
 		selected: make(map[int]struct{}),
 	}
 }
+
 func (m TuiModel) Init() tea.Cmd {
 	return nil
 }
+
 func (m TuiModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	switch msg := msg.(type) {
 
@@ -52,6 +52,8 @@ func (m TuiModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			} else {
 				m.selected[m.cursor] = struct{}{}
 			}
+
+			// Setting Output from the main options checkbox selected value
 			m.Output.Text_output = m.choices[m.cursor]
 			return m, tea.Quit
 		}
@@ -59,6 +61,7 @@ func (m TuiModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 	return m, nil
 }
+
 func (m TuiModel) View() string {
 	s := "\nWhat to do?\n\n"
 

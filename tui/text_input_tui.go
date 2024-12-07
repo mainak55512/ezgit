@@ -13,7 +13,7 @@ type textModel struct {
 
 var (
 	placeHolderStyle = lipgloss.NewStyle().Italic(true)
-	OutputValue      string
+	OutputValue      string // Output for the text tui
 )
 
 func textInputModel(placeHolder string) textModel {
