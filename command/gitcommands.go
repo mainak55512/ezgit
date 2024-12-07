@@ -80,8 +80,10 @@ func SwitchGitBranch(sourcebranch, destinationBranch string) error {
 	if err := cmd.Run(); err != nil {
 		return err
 	}
-	if err := MergeGitBranch(sourcebranch); err != nil {
-		return err
+	if sourcebranch != destinationBranch {
+		if err := MergeGitBranch(sourcebranch); err != nil {
+			return err
+		}
 	}
 	return nil
 }
@@ -104,6 +106,8 @@ func CreateGitBranch(currentBranch, newBranch string) error {
 
 func MergeGitBranch(branch string) error {
 	cmd := exec.Command("git", "merge", branch)
+	cmd.Stdin = os.Stdin
+	cmd.Stdout = os.Stdout
 	if err := cmd.Run(); err != nil {
 		return err
 	}

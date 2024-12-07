@@ -6,7 +6,7 @@ import (
 	"github.com/mainak55512/ezgit/tui"
 )
 
-func HandleBranchOperations(option string) error {
+func HandleBranchOperations(option, baseBranch string) error {
 	currentBranch, err := command.GetBranch()
 	if err != nil {
 		return err
@@ -27,7 +27,7 @@ func HandleBranchOperations(option string) error {
 		if err != nil {
 			return err
 		}
-		if err := command.SwitchGitBranch(currentBranch, br); err != nil {
+		if err := command.SwitchGitBranch(baseBranch, br); err != nil {
 			return err
 		}
 	case "Create & Switch Branch":
@@ -35,22 +35,24 @@ func HandleBranchOperations(option string) error {
 			return err
 		}
 		newBranch := tui.StartInputTextModel("New Branch Name")
-		if err := command.CreateGitBranch(currentBranch, newBranch); err != nil {
+		if err := command.CreateGitBranch(baseBranch, newBranch); err != nil {
 			return err
 		}
 	case "Delete Branch":
 		var branchList []string
 		for _, elem := range allAvailableBranches {
-			if elem != currentBranch {
+			if elem != currentBranch && elem != baseBranch {
 				branchList = append(branchList, elem)
 			}
 		}
-		br, err := tui.StartAvailableBranchOptions(branchList)
-		if err != nil {
-			return err
-		}
-		if err := command.DeleteGitBranch(br); err != nil {
-			return err
+		if len(branchList) > 0 {
+			br, err := tui.StartAvailableBranchOptions(branchList)
+			if err != nil {
+				return err
+			}
+			if err := command.DeleteGitBranch(br); err != nil {
+				return err
+			}
 		}
 	}
 	return nil

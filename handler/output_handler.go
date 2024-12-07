@@ -30,11 +30,15 @@ func Handler(op tui.Outputs) string {
 		}
 		return "Pull"
 	case "Manage Branches":
+		conf, err := config.ConfigEZ()
+		if err != nil {
+			return fmt.Sprintf("%s, %s", "something went wrong", err)
+		}
 		opt, err := tui.StartBranchModel()
 		if err != nil {
 			return fmt.Sprintf("%s, %s", "something went wrong", err)
 		}
-		if err := HandleBranchOperations(opt); err != nil {
+		if err := HandleBranchOperations(opt, conf.BaseBranch); err != nil {
 			return fmt.Sprintf("%s, %s", "something went wrong", err)
 		}
 		return "Branch"
